@@ -2,7 +2,7 @@
 Problem 2: Dictionary Operations and Nested Structures
 Practice working with Python dictionaries - creating, accessing, modifying, and nesting them.
 """
-
+import string
 
 def create_student_record(name, age, major, gpa):
     """
@@ -23,7 +23,12 @@ def create_student_record(name, age, major, gpa):
     """
     # TODO: Implement this function
     # Return a dictionary with the provided information
-    pass
+    return {
+        'name': name,
+        'age': age,
+        'major': major,
+        'gpa': gpa
+    }
 
 
 def get_value_safely(dictionary, key, default=None):
@@ -47,7 +52,7 @@ def get_value_safely(dictionary, key, default=None):
     """
     # TODO: Implement this function
     # Hint: Use the .get() method or check if key in dictionary
-    pass
+    return dictionary.get(key, default)
 
 
 def merge_dictionaries(dict1, dict2):
@@ -67,7 +72,9 @@ def merge_dictionaries(dict1, dict2):
     """
     # TODO: Implement this function
     # Create a new dictionary with items from both
-    pass
+    merged = dict1.copy()
+    merged.update(dict2)
+    return merged
 
 
 def count_word_frequency(text):
@@ -88,10 +95,18 @@ def count_word_frequency(text):
     # TODO: Implement this function
     # Steps:
     # 1. Convert text to lowercase
+    text = text.lower()
     # 2. Remove punctuation (you can use .replace() or import string)
+    translator = str.maketrans('', '', string.punctuation)
+    text = text.translate(translator)
     # 3. Split into words
+    words = text.split()
     # 4. Count each word's frequency
-    pass
+    frequency = {}
+    for word in words:
+        frequency[word] = frequency.get(word, 0) + 1
+
+    return frequency
 
 
 def invert_dictionary(dictionary):
@@ -111,7 +126,7 @@ def invert_dictionary(dictionary):
     """
     # TODO: Implement this function
     # Create a new dictionary with values as keys and keys as values
-    pass
+    return {value: key for key, value in dictionary.items()}
 
 
 def filter_dictionary(dictionary, keys_to_keep):
@@ -131,7 +146,7 @@ def filter_dictionary(dictionary, keys_to_keep):
     """
     # TODO: Implement this function
     # Loop through keys_to_keep and add them to result if they exist
-    pass
+    return {key: dictionary[key] for key in keys_to_keep if key in dictionary}
 
 
 def group_by_first_letter(words):
@@ -153,7 +168,15 @@ def group_by_first_letter(words):
     #   - Get first letter
     #   - Add word to the list for that letter
     # Hint: Use .setdefault() or check if key exists
-    pass
+    groups = {}
+    for word in words:
+        if not word:  # skip empty strings
+            continue
+        first = word[0].lower()
+        if first not in groups:
+            groups[first] = []
+        groups[first].append(word)
+    return groups
 
 
 def calculate_grades_average(students):
@@ -178,7 +201,14 @@ def calculate_grades_average(students):
     # TODO: Implement this function
     # For each student, calculate average of their grades
     # Hint: sum(grades) / len(grades)
-    pass
+    averages = {}
+    for name, grades in students.items():
+        if grades:  # avoid division by zero
+            avg = sum(grades) / len(grades)
+            averages[name] = round(avg, 2)
+        else:
+            averages[name] = 0.0
+    return averages
 
 
 def nested_dict_access(data, keys):
@@ -203,7 +233,12 @@ def nested_dict_access(data, keys):
     # TODO: Implement this function
     # Start with data, then traverse using each key
     # Return None if any key is missing
-    pass
+    current = data
+    for key in keys:
+        if not isinstance(current, dict) or key not in current:
+            return None
+        current = current[key]
+    return current
 
 
 # Test cases
